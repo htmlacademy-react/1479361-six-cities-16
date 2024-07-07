@@ -4,12 +4,10 @@ import App from './components/App/App';
 
 export type NumberOfOffers = {
   countOffers: number;
-  // id: number;
 }
 
 const numberOfOffers: NumberOfOffers = {
   countOffers: 6,
-  // id
 };
 
 const root = ReactDOM.createRoot(
