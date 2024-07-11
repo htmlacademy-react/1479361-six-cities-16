@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import './Not-found-page.css';
+import './NotFoundPage.css';
 
 const NotFounPage = () => (
   <div className='not-found__wrapper'>

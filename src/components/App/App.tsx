@@ -1,39 +1,67 @@
 import {Route, BrowserRouter, Routes} from 'react-router-dom';
 import MainPage from '../Main/Main-page';
-import { NumberOfOffers } from '../..';
-import LoginPage from '../Login/Login-page';
-import FavorietsPage from '../Favoriets/Favoriets-page';
-import OfferPage from '../Offer/Offer-page';
-import NotFounPage from '../NotFounPage/Not-found-page';
-import { AppRoute, AuthorizationStatus } from '../../const';
-import PrivateRoute from '../privateRoute/private-route';
+import LoginPage from '../Login/LoginPage';
+// import FavorietsPage from '../Favoriets/Favoriets-page';
+// import OfferPage from '../Offer/Offer-page';
+import NotFounPage from '../NotFounPage/NotFoundPage';
+import { AppRoute} from '../../const';
+import PrivateRoute from '../privateRoute/PrivateRoute';
+import { Offers } from '../../types';
+import OfferPage from '../Offer/OfferPage';
+import { useState } from 'react';
+import FavorietsPage from '../Favoriets/FavorietsPage';
+// import PlaceCard from '../PlaceCard/PlaceCard';
 
-function App(props: NumberOfOffers) {
+function App({offers}: {offers: Offers[]}) {
+  const [id, setId] = useState('-1');
+
+
+  let offer: Offers | undefined;
+  offers.forEach((currentOffer: Offers) => {
+    if(currentOffer.id === id){
+      offer = currentOffer;
+    }
+  });
+
+  // const offer: Offers | undefined = offers.find((currentOffer: Offers) => currentOffer.id === id);
+
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path={AppRoute.Root}
-          element={<MainPage {...props}/>}
+          element={<MainPage offers={offers}/>}
         />
         <Route
           path={AppRoute.Login}
-          element={<LoginPage/>}
+          element={
+            <PrivateRoute
+              requareAuth={false}
+              redirectTo={AppRoute.Root}
+            >
+              <LoginPage/>
+            </PrivateRoute>
+          }
         />
         <Route
           path={AppRoute.Favoriets}
           element={
             <PrivateRoute
-              authorizationStatus={AuthorizationStatus.NoAuth}
+              requareAuth
+              redirectTo={AppRoute.Login}
             >
-              <FavorietsPage/>
+              <FavorietsPage offers={offers}/>
             </PrivateRoute>
           }
         />
-        {/* offer передается с id погляди завтра че как */}
         <Route
           path={AppRoute.Offer}
-          element={<OfferPage/>}
+          element={
+            <OfferPage
+              offer={offer}
+              setIdNumber={setId}
+            />
+          }
         />
         <Route
           path='*'
